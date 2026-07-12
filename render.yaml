@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: fello-account-intelligence
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt && cd frontend && npm ci && npm run build
+    startCommand: python -m uvicorn backend.app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: FIRECRAWL_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TAVILY_SEARCH_URL
+        value: https://api.tavily.com/search
+      - key: FIRECRAWL_SCRAPE_URL
+        value: https://api.firecrawl.dev/v2/scrape
+      - key: GEMINI_GENERATE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent
+      - key: GEMINI_MODEL
+        value: gemini-3.1-flash-lite
+      - key: RESEARCH_TIMEOUT_SECONDS
+        value: "45"

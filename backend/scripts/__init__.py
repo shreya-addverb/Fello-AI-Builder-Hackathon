@@ -1,0 +1,1 @@
+"""Standalone provider connectivity diagnostics."""

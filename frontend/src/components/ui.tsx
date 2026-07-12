@@ -1,0 +1,11 @@
+import {ChevronDown,CheckCircle2,AlertCircle,LoaderCircle,type LucideIcon} from 'lucide-react';
+import {useState,type HTMLAttributes,type ReactNode} from 'react';import {cn,percent} from '../lib/utils';
+export function Card({children,className='',...props}:HTMLAttributes<HTMLElement>){return <section className={cn('card',className)} {...props}>{children}</section>}
+export function Badge({children,tone='neutral'}:{children:ReactNode;tone?:'neutral'|'success'|'warning'|'danger'}){return <span className={`badge ${tone}`}>{children}</span>}
+export function StatusBadge({status}:{status:string}){const tone=status==='completed'||status==='healthy'?'success':status==='failed'?'danger':status==='running'?'warning':'neutral';return <Badge tone={tone}>{status}</Badge>}
+export function MetricCard({label,value,detail,icon:Icon}:{label:string;value:ReactNode;detail:string;icon:LucideIcon}){return <Card className="metric"><div className="metric-icon"><Icon size={18}/></div><div><p className="eyebrow">{label}</p><strong>{value}</strong><p className="muted">{detail}</p></div></Card>}
+export function ConfidenceBar({value}:{value?:number|null}){return <div className="confidence"><div><span>Confidence</span><b>{percent(value)}</b></div><div className="bar"><i style={{width:`${(value||0)*100}%`}}/></div></div>}
+export function Expandable({title,meta,children,defaultOpen=false}:{title:string;meta?:ReactNode;children:ReactNode;defaultOpen?:boolean}){const [open,setOpen]=useState(defaultOpen);return <div className="expandable"><button onClick={()=>setOpen(!open)} aria-expanded={open}><span>{title}</span><span className="expand-meta">{meta}<ChevronDown size={16} className={open?'rotate':''}/></span></button>{open&&<div className="expand-body">{children}</div>}</div>}
+export function JsonViewer({data}:{data:unknown}){return <pre className="json"><code>{JSON.stringify(data,null,2)}</code></pre>}
+export function Empty({icon:Icon,title,body}:{icon:LucideIcon;title:string;body:string}){return <div className="empty"><Icon/><h3>{title}</h3><p>{body}</p></div>}
+export function StageIcon({status}:{status:string}){return status==='completed'?<CheckCircle2 className="green"/>:status==='failed'?<AlertCircle className="red"/>:status==='running'?<LoaderCircle className="spin green"/>:<span className="stage-dot"/>}
